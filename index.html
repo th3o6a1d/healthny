@@ -1,5 +1,30 @@
 <!DOCTYPE html>
 <html>
+<meta charset="utf-8">
+<style>
+
+.q0-9 { fill:rgb(247,251,255); }
+.q1-9 { fill:rgb(222,235,247); }
+.q2-9 { fill:rgb(198,219,239); }
+.q3-9 { fill:rgb(158,202,225); }
+.q4-9 { fill:rgb(107,174,214); }
+.q5-9 { fill:rgb(66,146,198); }
+.q6-9 { fill:rgb(33,113,181); }
+.q7-9 { fill:rgb(8,81,156); }
+.q8-9 { fill:rgb(8,48,107); }
+
+.scroll-right {
+    position: fixed;
+    top: 1em;
+    right: 1em;
+}
+.scroll-left {
+    position: fixed;
+    top: 1em;
+    left: 1em;
+}
+
+</style>
 
   <head>
     <meta charset='utf-8' />
@@ -7,6 +32,13 @@
     <meta name="description" content="Healthny : 2012 Discharge CCS Diagnosis Data by 3-Digit Zip Code, Visualized with D3.js" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.js"></script>
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css">
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
     <title>Healthny</title>
   </head>
@@ -31,37 +63,105 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>
-<a name="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages"><span class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+body>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+<div class="well scroll-right" style="width:450px" id="info">
+  <h4>2012 Discharge Diagnosis Data by 3-digit <br>Zip Code</h4>
+</div>
+<div class="well scroll-left">
+<input type="file" id="files" name="files[]" multiple />
+<output id="list"></output>
+</div>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<script>
+$('input[type=file]').change(function () {
+    reloadMap()
+});
 
-<h3>
-<a name="designer-templates" class="anchor" href="#designer-templates"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+function reloadMap(output) {
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+    var width = window.innerWidth, height = window.innerHeight
 
-<h3>
-<a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
+    var projection = d3.geo.mercator().scale(5000).translate([width/2, height/2]).center( [-76.0,43.0] )
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+    var path = d3.geo.path()
+        .projection(projection);
 
-<h3>
-<a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+    var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height) 
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+    var fullPath = $('input[type=file]').val()
+    var file = fullPath.replace(/^.*[\\\/]/, '')
 
-<h3>
-<a name="support-or-contact" class="anchor" href="#support-or-contact"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
+    d3.text('patient_diag/'+ file, function(datasetText) {
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+      var parsedCSV = d3.csv.parseRows(datasetText);
+
+      function getLargest(){
+        var largest = 0
+          for(i=0;i<parsedCSV.length;i++){
+            var incidence = (parsedCSV[i][1] / parsedCSV[i][2]) * 1000
+            console.log(incidence)
+            if(incidence>largest && incidence!==Number.POSITIVE_INFINITY) {
+              largest = incidence;
+            };
+         };
+         return largest
+      };
+
+      var quantize = d3.scale.quantize()
+        .domain([0, getLargest()])
+        .range(d3.range(9).map(function(i) { return "q" + i + "-9"; }));
+
+      d3.json("ny.topojson", function(error, ny) {
+        svg.append("path")
+          .datum(topojson.feature(ny, ny.objects.ny))
+          .attr("d", path)
+
+      svg.selectAll("path")
+        .data(topojson.feature(ny, ny.objects.ny).features)
+        .enter()
+        .append("path")
+          .attr("title", function(d) {return d.id})
+          .attr("value", function(d) {return getIncidence(d)})
+          .attr("class", function(d) {return quantize(getIncidence(d))})
+          .on("click", function(d) {return $('#info').html("<b>Zip:</b> " + d.id + "<br><br><b>Hospitalizations per Capita in 2012 in " + Math.floor(Number(d.id)/100) * 100 + "</b>: <br>" + getIncidence(d) + "<br><br><b>Population:</br> " + getPopulation(d))})
+          .attr("d", path)
+
+        function getIncidence(d){
+          var zip = new Number(d.id)
+          var zip = Math.floor(zip/100)*100
+          for(i=0;i<parsedCSV.length;i++){
+            if(parsedCSV[i][0]==zip){
+              var incidence = (parsedCSV[i][1] / parsedCSV[i][2]) * 1000
+              return incidence
+            };
+          };
+        };
+
+        function getPopulation(d){
+          var zip = new Number(d.id)
+          var zip = Math.floor(zip/100)*100
+          for(i=0;i<parsedCSV.length;i++){
+            if(parsedCSV[i][0]==zip){
+              var population = parsedCSV[i][2]
+              return population
+            };
+          };
+        };
+      });
+    });
+};
+</script></body>
+
+
+
+
+
+
+
       </section>
     </div>
 
