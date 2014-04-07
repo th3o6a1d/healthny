@@ -56,6 +56,9 @@ function reloadMap(output) {
 
     var projection = d3.geo.mercator().scale(5000).translate([width/2, height/2]).center( [-76.0,43.0] )
 
+    var circleData = [
+    { "cx": 250, "cy": 200, "radius": 20, "color" : "green" }];
+
     var path = d3.geo.path()
         .projection(projection);
 
@@ -63,8 +66,33 @@ function reloadMap(output) {
         .attr("width", width)
         .attr("height", height) 
 
+    var circles = svg.selectAll("circle")
+      .data(circleData)
+      .enter()
+      .append("circle");
+
+    // var circleAttributes = circles
+    //   .attr("cx", function (d) { return d.cx; })
+    //   .attr("cy", function (d) { return d.cy; })
+    //   .attr("r", function (d) { return d.radius; })
+    //   .style("fill", function (d) { return d.color; });
+
+    var text = svg.selectAll("text")
+      .data(circleData)
+      .enter()
+      .append("text");
+
     var fullPath = $('input[type=file]').val()
     var file = fullPath.replace(/^.*[\\\/]/, '')
+
+    var textLabels = text
+      .attr("x", function(d) { return d.cx; })
+      .attr("y", function(d) { return d.cy; })
+      .text(file)
+      .attr("font-family", "verdana")
+      .attr("font-size", "20px")
+      .attr("fill", "red");
+
 
     d3.text('patient_diag/'+ file, function(datasetText) {
 
@@ -98,8 +126,9 @@ function reloadMap(output) {
           .attr("title", function(d) {return d.id})
           .attr("value", function(d) {return getIncidence(d)})
           .attr("class", function(d) {return quantize(getIncidence(d))})
-          .on("click", function(d) {return $('#info').html("<b>Zip:</b> " + d.id + "<br><br><b>Hospitalizations per Capita in 2012 in " + Math.floor(Number(d.id)/100) * 100 + "</b>: <br>" + getIncidence(d) + "<br><br><b>Population:</br> " + getPopulation(d))})
+          .on("click", function(d) {return $('#info').html("<b>Zip:</b> " + d.id + "<br><br><b>Hospitalizations per 1000 persons in 2012 in " + Math.floor(Number(d.id)/100) * 100 + "</b>: <br>" + getIncidence(d) + "<br><br><b>Population:</br> " + getPopulation(d))})
           .attr("d", path)
+        .exit()
 
         function getIncidence(d){
           var zip = new Number(d.id)
