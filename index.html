@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.q0-9 { fill:rgb(247,251,255); }
+.q1-9 { fill:rgb(222,235,247); }
+.q2-9 { fill:rgb(198,219,239); }
+.q3-9 { fill:rgb(158,202,225); }
+.q4-9 { fill:rgb(107,174,214); }
+.q5-9 { fill:rgb(66,146,198); }
+.q6-9 { fill:rgb(33,113,181); }
+.q7-9 { fill:rgb(8,81,156); }
+.q8-9 { fill:rgb(8,48,107); }
+
+.scroll-right {
+    position: fixed;
+    top: 1em;
+    right: 1em;
+}
+.scroll-left {
+    position: fixed;
+    top: 1em;
+    left: 1em;
+}
+
+</style>
+<script src="resources/jquery.js"></script>
+<link rel="stylesheet" type="text/css" href="resources/bootstrap.min.css">
+<script src="resources/d3.v3.min.js"></script>
+<script src="resources/topojson.v1.min.js"></script>
+<script src="resources/bootstrap.min.js"></script>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.js"></script>
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css">
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<body>
+
+<div class="well scroll-right" style="width:450px" id="info">
+  <h4>2012 Discharge Diagnosis Data by 3-digit <br>Zip Code</h4>
+</div>
+<div class="well scroll-left">
+
+<select id="selector">
+<option value="ABDOMINAL HERNIA.csv">ABDOMINAL HERNIA.csv</option>
+<option value="ABDOMINAL PAIN.csv">ABDOMINAL PAIN.csv</option>
+<option value="ACQUIRD FOOT DEFORMITY.csv">ACQUIRD FOOT DEFORMITY.csv</option>
+<option value="ACUTE CVD.csv">ACUTE CVD.csv</option>
+<option value="ACUTE MYOCARDL INFARCT.csv">ACUTE MYOCARDL INFARCT.csv</option>
+<option value="ACUTE POSTHMRG ANEMIA.csv">ACUTE POSTHMRG ANEMIA.csv</option>
+<option value="ACUTE RENAL FAILURE.csv">ACUTE RENAL FAILURE.csv</option>
+<option value="ADJUSTMENT DISORDERS.csv">ADJUSTMENT DISORDERS.csv</option>
+<option value="ADMIN SOCIAL ADMISSION.csv">ADMIN SOCIAL ADMISSION.csv</option>
+<option value="ADULT RESPIRTRY FAILURE.csv">ADULT RESPIRTRY FAILURE.csv</option>
+<option value="ALCOHOL RELATD DISORDER.csv">ALCOHOL RELATD DISORDER.csv</option>
+<option value="ALLERGIC REACTION.csv">ALLERGIC REACTION.csv</option>
+<option value="ANAL RECTAL COND.csv">ANAL RECTAL COND.csv</option>
+<option value="ANEMIA.csv">ANEMIA.csv</option>
+<option value="ANEURYSM.csv">ANEURYSM.csv</option>
+<option value="ANXIETY DISORDERS.csv">ANXIETY DISORDERS.csv</option>
+<option value="APPENDICITIS.csv">APPENDICITIS.csv</option>
+<option value="ARM FRACTURE.csv">ARM FRACTURE.csv</option>
+<option value="ARTRL EMBOLISM THROMB.csv">ARTRL EMBOLISM THROMB.csv</option>
+<option value="ASPIRATION PNEUMONITIS.csv">ASPIRATION PNEUMONITIS.csv</option>
+<option value="ASTHMA.csv">ASTHMA.csv</option>
+<option value="BACK PROBLEM.csv">BACK PROBLEM.csv</option>
+<option value="BEHAVIOR DISORDERS.csv">BEHAVIOR DISORDERS.csv</option>
+<option value="BENIGN UTERIN NEOPLASM.csv">BENIGN UTERIN NEOPLASM.csv</option>
+<option value="BILIARY TRACT DISEASE.csv">BILIARY TRACT DISEASE.csv</option>
+<option value="BIRTH ASPHYXIA.csv">BIRTH ASPHYXIA.csv</option>
+<option value="BIRTH TRAUMA.csv">BIRTH TRAUMA.csv</option>
+<option value="BLADDER CANCER.csv">BLADDER CANCER.csv</option>
+<option value="BLINDNESS.csv">BLINDNESS.csv</option>
+<option value="BONE CONN TISSU CANCER.csv">BONE CONN TISSU CANCER.csv</option>
+<option value="BPHYPERPLASIA.csv">BPHYPERPLASIA.csv</option>
+<option value="BRAIN NERV SYST CANCER.csv">BRAIN NERV SYST CANCER.csv</option>
+<option value="BREAST CANCER.csv">BREAST CANCER.csv</option>
+<option value="BRONCHIAL LUNG CANCER.csv">BRONCHIAL LUNG CANCER.csv</option>
+<option value="BRONCHITIS.csv">BRONCHITIS.csv</option>
+<option value="BURNS.csv">BURNS.csv</option>
+<option value="CARDIAC ARREST   VF.csv">CARDIAC ARREST   VF.csv</option>
+<option value="CARDIO CIRC CONG ANMLY.csv">CARDIO CIRC CONG ANMLY.csv</option>
+<option value="CARDITIS CARDIOMYOPTHY.csv">CARDITIS CARDIOMYOPTHY.csv</option>
+<option value="CATARACT.csv">CATARACT.csv</option>
+<option value="CERVICAL CANCER.csv">CERVICAL CANCER.csv</option>
+<option value="CHEMO RADIATN THERAPY.csv">CHEMO RADIATN THERAPY.csv</option>
+<option value="CHEST PAIN.csv">CHEST PAIN.csv</option>
+<option value="CHF.csv">CHF.csv</option>
+<option value="CHILDHOOD DISORDERS.csv">CHILDHOOD DISORDERS.csv</option>
+<option value="CHRONIC RENAL FAILURE.csv">CHRONIC RENAL FAILURE.csv</option>
+<option value="CHRONIC SKIN ULCER.csv">CHRONIC SKIN ULCER.csv</option>
+<option value="COAG HEMRRGE DISORDER.csv">COAG HEMRRGE DISORDER.csv</option>
+<option value="COLON CANCER.csv">COLON CANCER.csv</option>
+<option value="COMA BRAIN DAMAGE.csv">COMA BRAIN DAMAGE.csv</option>
+<option value="CONDUCTION DISORDER.csv">CONDUCTION DISORDER.csv</option>
+<option value="CONTRCPTV PROCRTV MGT.csv">CONTRCPTV PROCRTV MGT.csv</option>
+<option value="COPD.csv">COPD.csv</option>
+<option value="CORONARY ATHEROSCLER.csv">CORONARY ATHEROSCLER.csv</option>
+<option value="CRUSH INTERNAL INJURY.csv">CRUSH INTERNAL INJURY.csv</option>
+<option value="CYSTIC FIBROSIS.csv">CYSTIC FIBROSIS.csv</option>
+<option value="DEVELOPMENTAL DISORDERS.csv">DEVELOPMENTAL DISORDERS.csv</option>
+<option value="DEVICE IMPLNT GRFT COMP.csv">DEVICE IMPLNT GRFT COMP.csv</option>
+<option value="DIABETES W COMPL.csv">DIABETES W COMPL.csv</option>
+<option value="DIABETES W O COMPL.csv">DIABETES W O COMPL.csv</option>
+<option value="DIVERTICUL OSIS ITIS.csv">DIVERTICUL OSIS ITIS.csv</option>
+<option value="DIZZINESS VERTIGO.csv">DIZZINESS VERTIGO.csv</option>
+<option value="DYSRHYTHMIA.csv">DYSRHYTHMIA.csv</option>
+<option value="EARLY LABOR.csv">EARLY LABOR.csv</option>
+<option value="ECTOPIC PREGNANCY.csv">ECTOPIC PREGNANCY.csv</option>
+<option value="ENCEPHALITIS.csv">ENCEPHALITIS.csv</option>
+<option value="ENDOMETRIOSIS.csv">ENDOMETRIOSIS.csv</option>
+<option value="ENTERITIS ULCER COLITIS.csv">ENTERITIS ULCER COLITIS.csv</option>
+<option value="EPILEPSY CONVULSIONS.csv">EPILEPSY CONVULSIONS.csv</option>
+<option value="ESOPHAGEAL CANCER.csv">ESOPHAGEAL CANCER.csv</option>
+<option value="ESOPHGEAL DISORDER.csv">ESOPHGEAL DISORDER.csv</option>
+<option value="EYE INFECTION.csv">EYE INFECTION.csv</option>
+<option value="FATIGUE MALAISE.csv">FATIGUE MALAISE.csv</option>
+<option value="FEMALE GENITAL CANCER.csv">FEMALE GENITAL CANCER.csv</option>
+<option value="FEMALE GENITL PROLAPSE.csv">FEMALE GENITL PROLAPSE.csv</option>
+<option value="FEMALE INFERTILITY.csv">FEMALE INFERTILITY.csv</option>
+<option value="FETAL DISTRESS.csv">FETAL DISTRESS.csv</option>
+<option value="FLUID ELECTRLYT DISORDR.csv">FLUID ELECTRLYT DISORDR.csv</option>
+<option value="FORCEPS DELIVERY.csv">FORCEPS DELIVERY.csv</option>
+<option value="GANGRENE.csv">GANGRENE.csv</option>
+<option value="GASTRITIS DUODENITIS.csv">GASTRITIS DUODENITIS.csv</option>
+<option value="GASTRODUODENAL ULCER.csv">GASTRODUODENAL ULCER.csv</option>
+<option value="GASTROENTRTS NONINFCT.csv">GASTROENTRTS NONINFCT.csv</option>
+<option value="GI CONGENITAL ANOMALY.csv">GI CONGENITAL ANOMALY.csv</option>
+<option value="GI HEMORRHAGE.csv">GI HEMORRHAGE.csv</option>
+<option value="GLAUCOMA.csv">GLAUCOMA.csv</option>
+<option value="GOUT CRYSTAL ARTHRPTHY.csv">GOUT CRYSTAL ARTHRPTHY.csv</option>
+<option value="GU CONGENITAL ANOMALY.csv">GU CONGENITAL ANOMALY.csv</option>
+<option value="HEAD NECK CANCER.csv">HEAD NECK CANCER.csv</option>
+<option value="HEADACHE MIGRAINE.csv">HEADACHE MIGRAINE.csv</option>
+<option value="HEART VALVE DISORDER.csv">HEART VALVE DISORDER.csv</option>
+<option value="HEMMORHOIDS.csv">HEMMORHOIDS.csv</option>
+<option value="HEPATITIS.csv">HEPATITIS.csv</option>
+<option value="HIP FRACTURE.csv">HIP FRACTURE.csv</option>
+<option value="HIV INFECTION.csv">HIV INFECTION.csv</option>
+<option value="HODGKINS DISEASE.csv">HODGKINS DISEASE.csv</option>
+<option value="HYPERLIPIDEMIA.csv">HYPERLIPIDEMIA.csv</option>
+<option value="HYPERTENSION W COMPL.csv">HYPERTENSION W COMPL.csv</option>
+<option value="HYPERTENSION.csv">HYPERTENSION.csv</option>
+<option value="IMMUNITY DISORDER.csv">IMMUNITY DISORDER.csv</option>
+<option value="IMMUNIZATION SCREENING.csv">IMMUNIZATION SCREENING.csv</option>
+<option value="IMPULSE CNTRL DISORDRS.csv">IMPULSE CNTRL DISORDRS.csv</option>
+<option value="INDUCED ABORTION.csv">INDUCED ABORTION.csv</option>
+<option value="INFCTV ARTHRITS OSTEOMY.csv">INFCTV ARTHRITS OSTEOMY.csv</option>
+<option value="INFLUENZA.csv">INFLUENZA.csv</option>
+<option value="INTESTINAL INFECTION.csv">INTESTINAL INFECTION.csv</option>
+<option value="INTESTINAL OBSTRUCTION.csv">INTESTINAL OBSTRUCTION.csv</option>
+<option value="INTRACRANIAL INJURY.csv">INTRACRANIAL INJURY.csv</option>
+<option value="JOINT INJURY.csv">JOINT INJURY.csv</option>
+<option value="KIDNEY RENAL CANCER.csv">KIDNEY RENAL CANCER.csv</option>
+<option value="LATE EFFECT CVD.csv">LATE EFFECT CVD.csv</option>
+<option value="LEG FRACTURE.csv">LEG FRACTURE.csv</option>
+<option value="LEUKEMIAS.csv">LEUKEMIAS.csv</option>
+<option value="LIVEBORN.csv">LIVEBORN.csv</option>
+<option value="LIVER BILE DUCT CANCER.csv">LIVER BILE DUCT CANCER.csv</option>
+<option value="LUNG DISEASE XTRN CAUSE.csv">LUNG DISEASE XTRN CAUSE.csv</option>
+<option value="LUPUS.csv">LUPUS.csv</option>
+<option value="LYMPHADENITIS.csv">LYMPHADENITIS.csv</option>
+<option value="MAL POSITION PRESNTATN.csv">MAL POSITION PRESNTATN.csv</option>
+<option value="MALE GENITAL CANCER.csv">MALE GENITAL CANCER.csv</option>
+<option value="MALE GENITL INFLAMMTN.csv">MALE GENITL INFLAMMTN.csv</option>
+<option value="MALIGNNT NEOPLASM NOS.csv">MALIGNNT NEOPLASM NOS.csv</option>
+<option value="MEDICAL EXAM EVALUATN.csv">MEDICAL EXAM EVALUATN.csv</option>
+<option value="MENINGITIS.csv">MENINGITIS.csv</option>
+<option value="MENOPAUSAL DISORDER.csv">MENOPAUSAL DISORDER.csv</option>
+<option value="MENSTRUAL DISORDER.csv">MENSTRUAL DISORDER.csv</option>
+<option value="MISC DISORDERS.csv">MISC DISORDERS.csv</option>
+<option value="MOOD DISORDERS.csv">MOOD DISORDERS.csv</option>
+<option value="MOUTH DISORDER.csv">MOUTH DISORDER.csv</option>
+<option value="MULTIPLE MYELOMA.csv">MULTIPLE MYELOMA.csv</option>
+<option value="MULTIPLE SCLEROSIS.csv">MULTIPLE SCLEROSIS.csv</option>
+<option value="MYCOSES.csv">MYCOSES.csv</option>
+<option value="NAUSEA VOMITING.csv">NAUSEA VOMITING.csv</option>
+<option value="NEPHRITIS.csv">NEPHRITIS.csv</option>
+<option value="NERVS SYS CONG ANOMLY.csv">NERVS SYS CONG ANOMLY.csv</option>
+<option value="NON EPITHELIAL CANCER.csv">NON EPITHELIAL CANCER.csv</option>
+<option value="NON HODGKINS LYMPHOMA.csv">NON HODGKINS LYMPHOMA.csv</option>
+<option value="NONMALG BREAST DISORD.csv">NONMALG BREAST DISORD.csv</option>
+<option value="NONMEDICINAL POISONING.csv">NONMEDICINAL POISONING.csv</option>
+<option value="NORML PREGNCY DELIVRY.csv">NORML PREGNCY DELIVRY.csv</option>
+<option value="NUTRITIONAL DEFICIENCY.csv">NUTRITIONAL DEFICIENCY.csv</option>
+<option value="OB PERINEAL VULV TRAUMA.csv">OB PERINEAL VULV TRAUMA.csv</option>
+<option value="OPEN WOUND EXTREMITIES.csv">OPEN WOUND EXTREMITIES.csv</option>
+<option value="OPEN WOUND HEAD TRUNK.csv">OPEN WOUND HEAD TRUNK.csv</option>
+<option value="OSTEOARTHRITIS.csv">OSTEOARTHRITIS.csv</option>
+<option value="OSTEOPOROSIS.csv">OSTEOPOROSIS.csv</option>
+<option value="OT FEMALE GENITL DISORD.csv">OT FEMALE GENITL DISORD.csv</option>
+<option value="OTH COMP BIRTH PUERPRM.csv">OTH COMP BIRTH PUERPRM.csv</option>
+<option value="OTH CONGENTL ANOMALY.csv">OTH CONGENTL ANOMALY.csv</option>
+<option value="OTH CONN TISSUE DISEASE.csv">OTH CONN TISSUE DISEASE.csv</option>
+<option value="OTH HERED DEG CNS COND.csv">OTH HERED DEG CNS COND.csv</option>
+<option value="OTH MALE GENITL DISORDR.csv">OTH MALE GENITL DISORDR.csv</option>
+<option value="OTH MEDS DRUG POISONG.csv">OTH MEDS DRUG POISONG.csv</option>
+<option value="OTHER AFTERCARE.csv">OTHER AFTERCARE.csv</option>
+<option value="OTHER BACTERIAL INFECTN.csv">OTHER BACTERIAL INFECTN.csv</option>
+<option value="OTHER BENIGN NEOPLASM.csv">OTHER BENIGN NEOPLASM.csv</option>
+<option value="OTHER BLADDR DISEASE.csv">OTHER BLADDR DISEASE.csv</option>
+<option value="OTHER BONE DISEASE.csv">OTHER BONE DISEASE.csv</option>
+<option value="OTHER CVD.csv">OTHER CVD.csv</option>
+<option value="OTHER EAR DISORDER.csv">OTHER EAR DISORDER.csv</option>
+<option value="OTHER EYE DISORDER.csv">OTHER EYE DISORDER.csv</option>
+<option value="OTHER FRACTURE.csv">OTHER FRACTURE.csv</option>
+<option value="OTHER GI DISORDER.csv">OTHER GI DISORDER.csv</option>
+<option value="OTHER GU COND.csv">OTHER GU COND.csv</option>
+<option value="OTHER HEART DISEASE.csv">OTHER HEART DISEASE.csv</option>
+<option value="OTHER INFECTIONS.csv">OTHER INFECTIONS.csv</option>
+<option value="OTHER INJURY COND.csv">OTHER INJURY COND.csv</option>
+<option value="OTHER JOINT DISORDER.csv">OTHER JOINT DISORDER.csv</option>
+<option value="OTHER KIDNEY DISEASE.csv">OTHER KIDNEY DISEASE.csv</option>
+<option value="OTHER LIVER DISEASE.csv">OTHER LIVER DISEASE.csv</option>
+<option value="OTHER NEOPLASM NOS.csv">OTHER NEOPLASM NOS.csv</option>
+<option value="OTHER NERVE DISORDER.csv">OTHER NERVE DISORDER.csv</option>
+<option value="OTHER PERINATAL COND.csv">OTHER PERINATAL COND.csv</option>
+<option value="OTHER PRIMARY CANCER.csv">OTHER PRIMARY CANCER.csv</option>
+<option value="OTHER SCREENING.csv">OTHER SCREENING.csv</option>
+<option value="OTHER SKIN DISORDER.csv">OTHER SKIN DISORDER.csv</option>
+<option value="OTHER URINARY CANCER.csv">OTHER URINARY CANCER.csv</option>
+<option value="OTHR ACQUIRD DEFORMITY.csv">OTHR ACQUIRD DEFORMITY.csv</option>
+<option value="OTHR CIRCULATRY DISEASE.csv">OTHR CIRCULATRY DISEASE.csv</option>
+<option value="OTHR COGNITIVE DISORDRS.csv">OTHR COGNITIVE DISORDRS.csv</option>
+<option value="OTHR ENDOCRINE DISORDR.csv">OTHR ENDOCRINE DISORDR.csv</option>
+<option value="OTHR GI PERITONL CANCER.csv">OTHR GI PERITONL CANCER.csv</option>
+<option value="OTHR HEMATOLOGIC COND.csv">OTHR HEMATOLOGIC COND.csv</option>
+<option value="OTHR INFLAMM SKIN COND.csv">OTHR INFLAMM SKIN COND.csv</option>
+<option value="OTHR LOWR RESP DISEASE.csv">OTHR LOWR RESP DISEASE.csv</option>
+<option value="OTHR NUTRITION DISORDER.csv">OTHR NUTRITION DISORDER.csv</option>
+<option value="OTHR PREGNANCY COMPL.csv">OTHR PREGNANCY COMPL.csv</option>
+<option value="OTHR RESPIRATRY CANCER.csv">OTHR RESPIRATRY CANCER.csv</option>
+<option value="OTHR STOMACH DISORDER.csv">OTHR STOMACH DISORDER.csv</option>
+<option value="OTHR UPPR RESP DISEASE.csv">OTHR UPPR RESP DISEASE.csv</option>
+<option value="OTHR UPPR RESP INFECTN.csv">OTHR UPPR RESP INFECTN.csv</option>
+<option value="OTHR VEIN LYMPH DISEASE.csv">OTHR VEIN LYMPH DISEASE.csv</option>
+<option value="OTITIS MEDIA.csv">OTITIS MEDIA.csv</option>
+<option value="OVARIAN CANCER.csv">OVARIAN CANCER.csv</option>
+<option value="OVARIAN CYST.csv">OVARIAN CYST.csv</option>
+<option value="PANCREAS CANCER.csv">PANCREAS CANCER.csv</option>
+<option value="PANCREAS DISORDER.csv">PANCREAS DISORDER.csv</option>
+<option value="PARALYSIS.csv">PARALYSIS.csv</option>
+<option value="PARKINSON S DISEASE.csv">PARKINSON S DISEASE.csv</option>
+<option value="PATHOLOGICAL FX.csv">PATHOLOGICAL FX.csv</option>
+<option value="PELVIC OBSTRUCTION.csv">PELVIC OBSTRUCTION.csv</option>
+<option value="PERINATAL JAUNDICE.csv">PERINATAL JAUNDICE.csv</option>
+<option value="PERIPH VSCRL ATHRSCLRS.csv">PERIPH VSCRL ATHRSCLRS.csv</option>
+<option value="PERITONITIS.csv">PERITONITIS.csv</option>
+<option value="PERSONALITY DISORDERS.csv">PERSONALITY DISORDERS.csv</option>
+<option value="PHLEBITIS.csv">PHLEBITIS.csv</option>
+<option value="PID.csv">PID.csv</option>
+<option value="PLEURISY.csv">PLEURISY.csv</option>
+<option value="PNEUMONIA.csv">PNEUMONIA.csv</option>
+<option value="POLIO OTHER CNS INFECT.csv">POLIO OTHER CNS INFECT.csv</option>
+<option value="POLYHYDRAMNIOS ET AL.csv">POLYHYDRAMNIOS ET AL.csv</option>
+<option value="POSTABORTION COMPL.csv">POSTABORTION COMPL.csv</option>
+<option value="PRECEREBRAL OCCLUSION.csv">PRECEREBRAL OCCLUSION.csv</option>
+<option value="PREG DIABETES ABN GLUC.csv">PREG DIABETES ABN GLUC.csv</option>
+<option value="PREGNANCY HEMORRHAG.csv">PREGNANCY HEMORRHAG.csv</option>
+<option value="PREGNANCY HYPERTENSN.csv">PREGNANCY HYPERTENSN.csv</option>
+<option value="PREVIOUS C SECTION.csv">PREVIOUS C SECTION.csv</option>
+<option value="PROLONGED PREGNANCY.csv">PROLONGED PREGNANCY.csv</option>
+<option value="PROSTATE CANCER.csv">PROSTATE CANCER.csv</option>
+<option value="PSYCHOTROPIC POISONING.csv">PSYCHOTROPIC POISONING.csv</option>
+<option value="PULMNRY HEART DISEASE.csv">PULMNRY HEART DISEASE.csv</option>
+<option value="RECTAL ANAL CANCER.csv">RECTAL ANAL CANCER.csv</option>
+<option value="REHAB PROSTH FIT ADJUST.csv">REHAB PROSTH FIT ADJUST.csv</option>
+<option value="RESP DISTRSS SYNDROME.csv">RESP DISTRSS SYNDROME.csv</option>
+<option value="RETINAL PROBLEMS.csv">RETINAL PROBLEMS.csv</option>
+<option value="RHEUMATOID ARTHRITIS.csv">RHEUMATOID ARTHRITIS.csv</option>
+<option value="SCHIZ OTH PSYCH DISORDR.csv">SCHIZ OTH PSYCH DISORDR.csv</option>
+<option value="SCREEN HIST MH SA CODES.csv">SCREEN HIST MH SA CODES.csv</option>
+<option value="SECONDARY MALIGNANCY.csv">SECONDARY MALIGNANCY.csv</option>
+<option value="SEPTICEMIA.csv">SEPTICEMIA.csv</option>
+<option value="SEXUAL INFECTIONS.csv">SEXUAL INFECTIONS.csv</option>
+<option value="SHOCK.csv">SHOCK.csv</option>
+<option value="SHORT GEST LOW BRTHWT.csv">SHORT GEST LOW BRTHWT.csv</option>
+<option value="SICKLE CELL ANEMIA.csv">SICKLE CELL ANEMIA.csv</option>
+<option value="SKIN MELANOMAS.csv">SKIN MELANOMAS.csv</option>
+<option value="SKIN SUBCUT TISS INFECT.csv">SKIN SUBCUT TISS INFECT.csv</option>
+<option value="SKULL FACE FRACTURE.csv">SKULL FACE FRACTURE.csv</option>
+<option value="SPINAL CORD INJURY.csv">SPINAL CORD INJURY.csv</option>
+<option value="SPONTANEOUS ABORTION.csv">SPONTANEOUS ABORTION.csv</option>
+<option value="SPRAIN STRAIN.csv">SPRAIN STRAIN.csv</option>
+<option value="STOMACH CANCER.csv">STOMACH CANCER.csv</option>
+<option value="SUBSTANCE RLTD DISORDER.csv">SUBSTANCE RLTD DISORDER.csv</option>
+<option value="SUICIDE SELF INFLCT INJ.csv">SUICIDE SELF INFLCT INJ.csv</option>
+<option value="SUPERFICL INJRY CONTUSN.csv">SUPERFICL INJRY CONTUSN.csv</option>
+<option value="SURGCL MED CARE COMPL.csv">SURGCL MED CARE COMPL.csv</option>
+<option value="SYNCOPE.csv">SYNCOPE.csv</option>
+<option value="TEETH JAW DISORDER.csv">TEETH JAW DISORDER.csv</option>
+<option value="TESTICULAR CANCER.csv">TESTICULAR CANCER.csv</option>
+<option value="THYROID CANCER.csv">THYROID CANCER.csv</option>
+<option value="THYROID DISORDER.csv">THYROID DISORDER.csv</option>
+<option value="TIA.csv">TIA.csv</option>
+<option value="TONSILLITIS.csv">TONSILLITIS.csv</option>
+<option value="TUBERCULOSIS.csv">TUBERCULOSIS.csv</option>
+<option value="UMBILICAL CORD COMPL.csv">UMBILICAL CORD COMPL.csv</option>
+<option value="UNCLASSIFIED.csv">UNCLASSIFIED.csv</option>
+<option value="UNGROUPABLE  999 .csv">UNGROUPABLE  999 .csv</option>
+<option value="UNKNOWN ORIGIN FEVER.csv">UNKNOWN ORIGIN FEVER.csv</option>
+<option value="URINARY TRACT INFECTION.csv">URINARY TRACT INFECTION.csv</option>
+<option value="URINARY TRACT STONE.csv">URINARY TRACT STONE.csv</option>
+<option value="UTERINE CANCER.csv">UTERINE CANCER.csv</option>
+<option value="VARICOSE VEIN.csv">VARICOSE VEIN.csv</option>
+<option value="VIRAL INFECTION.csv">VIRAL INFECTION.csv</option>
+<option value="WHITE BLOODCELL DISEASE.csv">WHITE BLOODCELL DISEASE.csv</option>
+</select>
+</div>
+
+<script>
+$('#selector').change(function () {
+    reloadMap()
+});
+
+function reloadMap(output) {
+
+    var width = window.innerWidth, height = window.innerHeight
+
+    var projection = d3.geo.mercator().scale(5000).translate([width/2, height/2]).center( [-76.0,43.0] )
+
+    var circleData = [
+    { "cx": 250, "cy": 200, "radius": 20, "color" : "green" }];
+
+    var path = d3.geo.path()
+        .projection(projection);
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height) 
+
+    var circles = svg.selectAll("circle")
+      .data(circleData)
+      .enter()
+      .append("circle");
+
+    // var circleAttributes = circles
+    //   .attr("cx", function (d) { return d.cx; })
+    //   .attr("cy", function (d) { return d.cy; })
+    //   .attr("r", function (d) { return d.radius; })
+    //   .style("fill", function (d) { return d.color; });
+
+    var text = svg.selectAll("text")
+      .data(circleData)
+      .enter()
+      .append("text");
+
+    var fullPath = $('#selector').val()
+    var file = fullPath.replace(/^.*[\\\/]/, '')
+
+    var textLabels = text
+      .attr("x", function(d) { return d.cx; })
+      .attr("y", function(d) { return d.cy; })
+      .text(file)
+      .attr("font-family", "verdana")
+      .attr("font-size", "20px")
+      .attr("fill", "red");
+
+
+    d3.text('patient_diag/'+ file, function(datasetText) {
+
+      var parsedCSV = d3.csv.parseRows(datasetText);
+
+      function getLargest(){
+        var largest = 0
+          for(i=0;i<parsedCSV.length;i++){
+            var incidence = (parsedCSV[i][1] / parsedCSV[i][2]) * 1000
+            console.log(incidence)
+            if(incidence>largest && incidence!==Number.POSITIVE_INFINITY) {
+              largest = incidence;
+            };
+         };
+         return largest
+      };
+
+      var quantize = d3.scale.quantize()
+        .domain([0, getLargest()])
+        .range(d3.range(9).map(function(i) { return "q" + i + "-9"; }));
+
+      d3.json("ny.topojson", function(error, ny) {
+        svg.append("path")
+          .datum(topojson.feature(ny, ny.objects.ny))
+          .attr("d", path)
+
+      svg.selectAll("path")
+        .data(topojson.feature(ny, ny.objects.ny).features)
+        .enter()
+        .append("path")
+          .attr("title", function(d) {return d.id})
+          .attr("value", function(d) {return getIncidence(d)})
+          .attr("class", function(d) {return quantize(getIncidence(d))})
+          .on("click", function(d) {return $('#info').html("<b>Zip:</b> " + d.id + "<br><br><b>Hospitalizations per 1000 persons in 2012 in " + Math.floor(Number(d.id)/100) * 100 + "</b>: <br>" + getIncidence(d) + "<br><br><b>Population:</br> " + getPopulation(d))})
+          .attr("d", path)
+        .exit()
+
+        function getIncidence(d){
+          var zip = new Number(d.id)
+          var zip = Math.floor(zip/100)*100
+          for(i=0;i<parsedCSV.length;i++){
+            if(parsedCSV[i][0]==zip){
+              var incidence = (parsedCSV[i][1] / parsedCSV[i][2]) * 1000
+              return incidence
+            };
+          };
+        };
+
+        function getPopulation(d){
+          var zip = new Number(d.id)
+          var zip = Math.floor(zip/100)*100
+          for(i=0;i<parsedCSV.length;i++){
+            if(parsedCSV[i][0]==zip){
+              var population = parsedCSV[i][2]
+              return population
+            };
+          };
+        };
+      });
+    });
+};
+</script>

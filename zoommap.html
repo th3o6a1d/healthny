@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.background {
+  fill: none;
+  pointer-events: all;
+}
+
+#zipcode {
+  fill: #aaa;
+}
+
+#zipcode .active {
+  fill: orange;
+}
+
+.scroll-left {
+    position: fixed;
+    top: 1em;
+    left: 1em;
+}
+
+.q0-9 { fill:rgb(247,251,255); }
+.q1-9 { fill:rgb(222,235,247); }
+.q2-9 { fill:rgb(198,219,239); }
+.q3-9 { fill:rgb(158,202,225); }
+.q4-9 { fill:rgb(107,174,214); }
+.q5-9 { fill:rgb(66,146,198); }
+.q6-9 { fill:rgb(33,113,181); }
+.q7-9 { fill:rgb(8,81,156); }
+.q8-9 { fill:rgb(8,48,107); }
+
+</style>
+<body>
+
+  <div class="well scroll-left" style="width:450px" id="info">
+  <h4>Zoomable D3 Map</h4>
+
+</div>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.js"></script>
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css">
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script>
+
+var dataset = [
+  {
+    "id":13500,
+    "rate":718
+  },
+  {
+    "id":13400,
+    "rate":187
+  },
+  {
+    "id":11500,
+    "rate":720
+  },
+  {
+    "id":13200,
+    "rate":229
+  },
+  {
+    "id":13100,
+    "rate":180
+  },
+  {
+    "id":13000,
+    "rate":388
+  },
+  {
+    "id":13700,
+    "rate":138
+  },
+  {
+    "id":13600,
+    "rate":236
+  },
+  {
+    "id":11300,
+    "rate":117
+  },
+  {
+    "id":11200,
+    "rate":250
+  },
+  {
+    "id":13900,
+    "rate":82
+  },
+  {
+    "id":13800,
+    "rate":139
+  },
+  {
+    "id":11900,
+    "rate":249
+  },
+  {
+    "id":11800,
+    "rate":72
+  },
+  {
+    "id":10100,
+    "rate":622
+  },
+  {
+    "id":10800,
+    "rate":858
+  },
+  {
+    "id":11600,
+    "rate":114
+  },
+  {
+    "id":14600,
+    "rate":478
+  },
+  {
+    "id":14700,
+    "rate":179
+  },
+  {
+    "id":14400,
+    "rate":304
+  },
+  {
+    "id":14500,
+    "rate":320
+  },
+  {
+    "id":14200,
+    "rate":564
+  },
+  {
+    "id":14300,
+    "rate":661
+  },
+  {
+    "id":14000,
+    "rate":444
+  },
+  {
+    "id":14100,
+    "rate":200
+  },
+  {
+    "id":14800,
+    "rate":283
+  },
+  {
+    "id":12000,
+    "rate":330
+  },
+  {
+    "id":12100,
+    "rate":280
+  },
+  {
+    "id":12200,
+    "rate":151
+  },
+  {
+    "id":10900,
+    "rate":537
+  },
+  {
+    "id":12400,
+    "rate":154
+  },
+  {
+    "id":12500,
+    "rate":448
+  },
+  {
+    "id":12600,
+    "rate":867
+  },
+  {
+    "id":12700,
+    "rate":992
+  },
+  {
+    "id":12800,
+    "rate":225
+  },
+  {
+    "id":12900,
+    "rate":164
+  },
+  {
+    "id":10000,
+    "rate":150
+  },
+  {
+    "id":14900,
+    "rate":496
+  },
+  {
+    "id":10600,
+    "rate":811
+  },
+  {
+    "id":10700,
+    "rate":227
+  },
+  {
+    "id":10400,
+    "rate":40
+  },
+  {
+    "id":10500,
+    "rate":646
+  },
+  {
+    "id":13300,
+    "rate":123
+  },
+  {
+    "id":11400,
+    "rate":728
+  },
+  {
+    "id":11700,
+    "rate":156
+  },
+  {
+    "id":12300,
+    "rate":162
+  },
+  {
+    "id":11100,
+    "rate":204
+  },
+  {
+    "id":10300,
+    "rate":468
+  },
+  {
+    "id":11000,
+    "rate":246
+  }
+]
+
+
+var width = 1000,
+    height = 600,
+    centered;
+
+function getLargest(){
+        var largest = 0
+          for(i=0;i<dataset.length;i++){
+            var rate = dataset[i].rate
+            if(rate>largest){
+              largest = rate;
+            }
+         };
+         return largest
+      };
+
+var quantize = d3.scale.quantize()
+    .domain([0, getLargest()])
+    .range(d3.range(9).map(function(i) { return "q" + i + "-9"; }));
+
+var projection = d3.geo.mercator().scale(4500).translate([width/2, height/2]).center( [-76.0,43.0] )
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.append("rect")
+    .attr("class", "background")
+    .attr("width", width)
+    .attr("height", height)
+    .on("click", clicked);
+
+var g = svg.append("g");
+
+$(document).ready(function() {   
+  d3.json("ny.topojson", function(error, ny) {
+  g.append("g")
+      .attr("id", "zipcode")
+    .selectAll("path")
+      .data(topojson.feature(ny, ny.objects.ny).features)
+    .enter().append("path")
+      .attr("d", path)
+      .on("click", clicked)
+      .attr("title", function(d) {return d.id})
+      .attr("class", function(d) { 
+        return quantize(getItem(d.id));
+        })
+  });
+});
+
+function getItem(zip){
+  var zip = new Number(zip)
+  var zip = Math.floor(zip/100)*100
+  var result = $.grep(dataset, function(e){ return e.id == zip; });
+  try {
+    return result[0].rate
+  }
+  catch(e) {
+    console.log('Could not load zip code ' + zip);
+  }}
+
+   
+function clicked(d) {
+  $('#info').html("<b>Zip:</b> " + d.id + "<br><br><b>Incidence Rate:</b> " + getItem(d.id))
+  var x, y, k;
+
+  if (d && centered !== d) {
+    var centroid = path.centroid(d);
+    x = centroid[0];
+    y = centroid[1];
+    k = 4;
+    centered = d;
+  } else {
+    x = width / 2;
+    y = height / 2;
+    k = 1;
+    centered = null;
+  }
+
+  g.selectAll("path")
+      .classed("active", centered && function(d) { return d === centered; });
+
+  g.transition()
+      .duration(750)
+      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+      .style("stroke-width", 1.5 / k + "px");
+}
+
+</script>
