@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<!-- Modified from code by mbostock, created by th3o6a1d for analyzing NY state health data.  http://health.data.ny.gov -->
+<!-- MIT License -->
+
 <style>
 
 .background {
@@ -48,7 +51,7 @@
 
 <script>
 
-
+// Random dataset.  Each 'id' is a 3-digit zip code.  'Rate' is incidence, prevalence, or whatever.
 
 var dataset = [
   {
@@ -303,8 +306,6 @@ d3.json("ny.topojson", function(error, ny) {
      spinner.stop()
   });
 
-
-
 function getItem(zip){
   var zip = new Number(zip)
   var zip = Math.floor(zip/100)*100
@@ -315,7 +316,6 @@ function getItem(zip){
   catch(e) {
     console.log('Could not load zip code ' + zip);
   }}
-
    
 function clicked(d) {
   $('#info').html("<b>Zip:</b> " + d.id + "<br><br><b>Incidence Rate in 3-Digit Zip Code Area:</b> " + getItem(d.id))
