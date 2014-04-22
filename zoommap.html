@@ -334,34 +334,24 @@ d3.json("hospadd.json", function(hosps) {
     .attr("fill", "steelblue")
     .on("mouseover", mouseover)
     .on("mouseout", mouseout)
-  
-  
-  g.append("g")
-    .attr("id", "labels")
-    .selectAll("path")
-    .data(hosps)
-    .enter()
-    .append("text")
-    .text(function(d) { return d.hospital; })
-    .attr("class", "place-label")
-    .attr("transform", function(d) { 
-      if(d.coordinates != []) {
-        return "translate(" + projection(d.coordinates) + ")";
-      }
-    
-})
-
+    .on("click", mouseclick)
+     
 });
 
-var mouseover = function() {
+var mouseover = function(d) {
     var circle = d3.select(this);
     circle.transition().duration(500).attr("r", 10 );
   }
 
-var mouseout = function() {
+var mouseout = function(d) {
     var circle = d3.select(this);
     circle.transition().duration(500).attr("r", 2);
   }
+
+var mouseclick = function(d) {
+    alert(d.hospital)
+  }
+
 
 
 function clicked(d) {
