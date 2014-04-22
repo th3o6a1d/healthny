@@ -34,16 +34,21 @@
 </style>
 <body>
 
-  <div class="well scroll-left" style="width:450px" id="info">
-  <h4>Zoomable D3 Map</h4>
 
-</div>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.js"></script>
 <link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/css/bootstrap.min.css">
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.0/spin.min.js"></script>
+
+<div class="well scroll-left" style="width:450px" id="info">
+<h4>Zoomable D3 Map</h4>
+</div>
+
 <script>
+
+
 
 var dataset = [
   {
@@ -244,6 +249,8 @@ var dataset = [
   }
 ]
 
+var target = document.getElementById('info')
+var spinner = new Spinner().spin(target);
 
 var width = 1000,
     height = 600,
@@ -275,14 +282,13 @@ var svg = d3.select("body").append("svg")
 
 svg.append("rect")
     .attr("class", "background")
+    .attr("id","canvas")
     .attr("width", width)
-    .attr("height", height)
-    .on("click", clicked);
+    .attr("height", height);
 
 var g = svg.append("g");
 
-$(document).ready(function() {   
-  d3.json("ny.topojson", function(error, ny) {
+d3.json("ny.topojson", function(error, ny) {
   g.append("g")
       .attr("id", "zipcode")
     .selectAll("path")
@@ -294,8 +300,10 @@ $(document).ready(function() {
       .attr("class", function(d) { 
         return quantize(getItem(d.id));
         })
+     spinner.stop()
   });
-});
+
+
 
 function getItem(zip){
   var zip = new Number(zip)
@@ -310,7 +318,7 @@ function getItem(zip){
 
    
 function clicked(d) {
-  $('#info').html("<b>Zip:</b> " + d.id + "<br><br><b>Incidence Rate:</b> " + getItem(d.id))
+  $('#info').html("<b>Zip:</b> " + d.id + "<br><br><b>Incidence Rate in 3-Digit Zip Code Area:</b> " + getItem(d.id))
   var x, y, k;
 
   if (d && centered !== d) {
