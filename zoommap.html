@@ -316,7 +316,54 @@ function getItem(zip){
   catch(e) {
     console.log('Could not load zip code ' + zip);
   }}
-   
+
+d3.json("hospadd.json", function(hosps) {
+
+  g.append("g")
+    .attr("id", "hosps")
+    .selectAll("path")
+    .data(hosps)
+    .enter().append("circle")
+    .attr("r", 2)
+    .attr("transform", function(d) { 
+      if(d.coordinates != []) {
+        return "translate(" + projection(d.coordinates) + ")";
+      }
+    })
+    .attr("dy", ".35em")
+    .attr("fill", "steelblue")
+    .on("mouseover", mouseover)
+    .on("mouseout", mouseout)
+  
+  
+  g.append("g")
+    .attr("id", "labels")
+    .selectAll("path")
+    .data(hosps)
+    .enter()
+    .append("text")
+    .text(function(d) { return d.hospital; })
+    .attr("class", "place-label")
+    .attr("transform", function(d) { 
+      if(d.coordinates != []) {
+        return "translate(" + projection(d.coordinates) + ")";
+      }
+    
+})
+
+});
+
+var mouseover = function() {
+    var circle = d3.select(this);
+    circle.transition().duration(500).attr("r", 10 );
+  }
+
+var mouseout = function() {
+    var circle = d3.select(this);
+    circle.transition().duration(500).attr("r", 2);
+  }
+
+
 function clicked(d) {
   $('#info').html("<b>Zip:</b> " + d.id + "<br><br><b>Incidence Rate in 3-Digit Zip Code Area:</b> " + getItem(d.id))
   var x, y, k;
