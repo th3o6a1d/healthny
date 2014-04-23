@@ -304,7 +304,40 @@ d3.json("ny.topojson", function(error, ny) {
         return quantize(getItem(d.id));
         })
      spinner.stop()
-  });
+
+
+d3.json("hospadd.json", function(hosps) {
+
+  node = g.append("g")
+      .attr("id","hosps")
+      .selectAll("path")
+      .data(hosps)
+      .enter()
+      .append("g")
+      .attr("class", "node")
+      .attr("transform", function(d) { return "translate(" + projection(d.coordinates) + ")"; });
+
+  node.append("circle")
+    .attr("r", 2)
+    .attr("dy", ".35em")
+    .attr("id", function(d) { return d.hospital; })
+    .attr("fill", "steelblue")
+    .on("mouseover", mouseover)
+    .on("mouseout", mouseout)
+    .on("click", mouseclick)
+
+  node.append("text")
+    .text(function(d) { return d.hospital; })
+    .attr("class","hidden")
+
+
+});
+
+
+});
+
+
+
 
 function getItem(zip){
   var zip = new Number(zip)
@@ -317,30 +350,12 @@ function getItem(zip){
     console.log('Could not load zip code ' + zip);
   }}
 
-d3.json("hospadd.json", function(hosps) {
-
-  g.append("g")
-    .attr("id", "hosps")
-    .selectAll("path")
-    .data(hosps)
-    .enter().append("circle")
-    .attr("r", 2)
-    .attr("transform", function(d) { 
-      if(d.coordinates != []) {
-        return "translate(" + projection(d.coordinates) + ")";
-      }
-    })
-    .attr("dy", ".35em")
-    .attr("fill", "steelblue")
-    .on("mouseover", mouseover)
-    .on("mouseout", mouseout)
-    .on("click", mouseclick)
-     
-});
-
 var mouseover = function(d) {
     var circle = d3.select(this);
     circle.transition().duration(500).attr("r", 10 );
+
+    var text = d3.select("#"+d.hospital);
+    text.attr("class","");
   }
 
 var mouseout = function(d) {
