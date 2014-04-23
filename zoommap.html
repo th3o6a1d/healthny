@@ -318,8 +318,7 @@ d3.json("hospadd.json", function(hosps) {
       .attr("transform", function(d) { return "translate(" + projection(d.coordinates) + ")"; });
 
   node.append("circle")
-    .attr("r", 4)
-    .attr("dy", ".35em")
+    .attr("r", 2)
     .attr("fill", "steelblue")
     .on("mouseover", mouseover)
     .on("mouseout", mouseout)
@@ -327,6 +326,7 @@ d3.json("hospadd.json", function(hosps) {
 
   node.append("text")
     .attr("id", function(d) { return "hosp"+d.id; })
+    .attr("dy", "-.85em")
     .text(function(d) { return d.hospital; })
     .attr("class","hidden")
     .attr("text-anchor","middle")
@@ -356,7 +356,7 @@ var mouseover = function(d) {
     // circle.transition().duration(500).attr("r", 10 );
 
     var text = d3.select("#hosp"+d.id);
-    text.attr("class","");
+    text.attr("class","")
   }
 
 var mouseout = function(d) {
@@ -364,7 +364,7 @@ var mouseout = function(d) {
     // circle.transition().duration(500).attr("r", 2);
 
     var text = d3.select("#hosp"+d.id);
-    setTimeout(function(){text.attr("class","hidden");},1000)
+    setTimeout(function(){text.attr("class","hidden")},250);
   }
 
 var mouseclick = function(d) {
@@ -384,14 +384,16 @@ function clicked(d) {
     y = centroid[1];
     k = 11;
     
-    g.selectAll("text").attr("transform", "scale(" + k/30 + ")")
+    g.selectAll("text").transition().duration(750).attr("transform", "scale(" + k/40 + ")")
+    g.selectAll("circle").transition().duration(750).attr("transform", "scale(" + k/40 + ")")
 
     centered = d;
   } else {
     x = width / 2;
     y = height / 2;
     k = 1;
-    g.selectAll("text").attr("transform", "scale(" + k + ")")
+    g.selectAll("text").transition().duration(750).attr("transform", "scale(" + k + ")")
+    g.selectAll("circle").transition().duration(750).attr("transform", "scale(" + k + ")")
     centered = null;
   }
 
