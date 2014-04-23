@@ -318,17 +318,18 @@ d3.json("hospadd.json", function(hosps) {
       .attr("transform", function(d) { return "translate(" + projection(d.coordinates) + ")"; });
 
   node.append("circle")
-    .attr("r", 2)
+    .attr("r", 4)
     .attr("dy", ".35em")
-    .attr("id", function(d) { return d.hospital; })
     .attr("fill", "steelblue")
     .on("mouseover", mouseover)
     .on("mouseout", mouseout)
     .on("click", mouseclick)
 
   node.append("text")
+    .attr("id", function(d) { return "hosp"+d.id; })
     .text(function(d) { return d.hospital; })
     .attr("class","hidden")
+    .attr("text-anchor","middle")
 
 
 });
@@ -351,25 +352,29 @@ function getItem(zip){
   }}
 
 var mouseover = function(d) {
-    var circle = d3.select(this);
-    circle.transition().duration(500).attr("r", 10 );
+    // var circle = d3.select(this);
+    // circle.transition().duration(500).attr("r", 10 );
 
-    var text = d3.select("#"+d.hospital);
+    var text = d3.select("#hosp"+d.id);
     text.attr("class","");
   }
 
 var mouseout = function(d) {
-    var circle = d3.select(this);
-    circle.transition().duration(500).attr("r", 2);
+    // var circle = d3.select(this);
+    // circle.transition().duration(500).attr("r", 2);
+
+    var text = d3.select("#hosp"+d.id);
+    setTimeout(function(){text.attr("class","hidden");},1000)
   }
 
 var mouseclick = function(d) {
-    alert(d.hospital)
+
   }
 
 
 
 function clicked(d) {
+
   $('#info').html("<b>Zip:</b> " + d.id + "<br><br><b>Incidence Rate in 3-Digit Zip Code Area:</b> " + getItem(d.id))
   var x, y, k;
 
@@ -378,11 +383,15 @@ function clicked(d) {
     x = centroid[0];
     y = centroid[1];
     k = 11;
+    
+    g.selectAll("text").attr("transform", "scale(" + k/30 + ")")
+
     centered = d;
   } else {
     x = width / 2;
     y = height / 2;
     k = 1;
+    g.selectAll("text").attr("transform", "scale(" + k + ")")
     centered = null;
   }
 
@@ -393,6 +402,7 @@ function clicked(d) {
       .duration(750)
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
       .style("stroke-width", 1.5 / k + "px");
+  
 }
 
 </script>
