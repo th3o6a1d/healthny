@@ -34,6 +34,58 @@
 .q7-9 { fill:rgb(8,81,156); }
 .q8-9 { fill:rgb(8,48,107); }
 
+div.tooltip {
+  background-color: #333;
+  min-width: 150px;
+  opacity: .9;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  border-radius: 4px;
+  padding: 4px 8px;
+  color: white;
+}
+/* line 65, ../../sass/hotels/hotels.scss */
+div.tooltip .t {
+  font-weight: bold;
+  margin-bottom: .3em;
+  color: #f2f2f2;
+}
+/* line 70, ../../sass/hotels/hotels.scss */
+div.tooltip table {
+  margin: 0;
+  width: 100%;
+}
+/* line 73, ../../sass/hotels/hotels.scss */
+div.tooltip table td {
+  padding: 0 !important;
+}
+/* line 75, ../../sass/hotels/hotels.scss */
+div.tooltip table td.r {
+  text-align: right;
+}
+/* line 78, ../../sass/hotels/hotels.scss */
+div.tooltip table td span.d {
+  color: #e6e6e6;
+  margin-right: 1px;
+  font-size: 10px;
+  vertical-align: top;
+  padding-top: 4px;
+}
+/* line 87, ../../sass/hotels/hotels.scss */
+div.tooltip .l {
+  color: #bfbfbf;
+}
+
+
+
+
+
+
+
+
+
 </style>
 <body>
 
@@ -322,6 +374,7 @@ d3.json("hospadd.json", function(hosps) {
     .attr("fill", "steelblue")
     .on("mouseover", mouseover)
     .on("mouseout", mouseout)
+    .on("mousemove", mousemove)
     .on("click", mouseclick)
 
   node.append("text")
@@ -351,27 +404,32 @@ function getItem(zip){
     console.log('Could not load zip code ' + zip);
   }}
 
-var mouseover = function(d) {
-    // var circle = d3.select(this);
-    // circle.transition().duration(500).attr("r", 10 );
 
-    var text = d3.select("#hosp"+d.id);
-    text.attr("class","")
-  }
+tooltip = d3.select("body").append("div").attr("class", "tooltip").style("position", "absolute").style("z-index", "10").style("opacity", 0);
 
-var mouseout = function(d) {
-    // var circle = d3.select(this);
-    // circle.transition().duration(500).attr("r", 2);
+mouseover = function(d) {
+    return tooltip.html("        <div class='t'>" + d.hospital + "</div>        <table>            <tr><td class='l'>Beds:</td><td class='r'><span class='d'></span>" + "</td></tr></table>").transition().duration(100).style("opacity", 1.0);
+};
 
-    var text = d3.select("#hosp"+d.id);
-    setTimeout(function(){text.attr("class","hidden")},250);
-  }
+mousemove = function(d) {
+    var o, x, y;
 
-var mouseclick = function(d) {
+    if (typeof event !== "undefined" && event !== null) {
+        x = event.pageX;
+        y = event.pageY;
+    } else {
+        o = $('.usmap').offset();
+        x = o.left + (d.xy[0] * .75);
+        y = o.top + (d.xy[1] * .75) + 67;
+    }
+    return tooltip.style("top", (y - 10) + "px").style("left", (x + 10) + "px");
+};
 
-  }
-
-
+mouseout = function() {
+    return tooltip.transition().delay(100).style("opacity", 0).each("end", function() {
+        return tooltip.style("top", "0px").style("left", "0px");
+    });
+};
 
 function clicked(d) {
 
@@ -384,8 +442,8 @@ function clicked(d) {
     y = centroid[1];
     k = 11;
     
-    g.selectAll("text").transition().duration(750).attr("transform", "scale(" + k/40 + ")")
-    g.selectAll("circle").transition().duration(750).attr("transform", "scale(" + k/40 + ")")
+    g.selectAll("text").transition().duration(750).attr("transform", "scale(" + k/50 + ")")
+    g.selectAll("circle").transition().duration(750).attr("transform", "scale(" + k/50 + ")")
 
     centered = d;
   } else {
