@@ -97,7 +97,7 @@ div.tooltip .l {
 <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.0/spin.min.js"></script>
 
-<div class="well scroll-left" style="width:450px" id="info">
+<div class="well scroll-left tooltip" style="width:450px" id="info">
 <h4>Zoomable D3 Map</h4>
 </div>
 
@@ -351,6 +351,7 @@ d3.json("ny.topojson", function(error, ny) {
     .enter().append("path")
       .attr("d", path)
       .on("click", clicked)
+      .on("mouseover", zipmouseover)
       .attr("title", function(d) {return d.id})
       .attr("class", function(d) { 
         return quantize(getItem(d.id));
@@ -390,8 +391,9 @@ d3.json("hospadd.json", function(hosps) {
 
 });
 
-
-
+zipmouseover = function(d) {
+$('#info').html("<h4><b>Zip:</b> " + d.id + "<br>Incidence Rate in 3-Digit Zip Code Area: " + getItem(d.id)) + "</h4>"
+}
 
 function getItem(zip){
   var zip = new Number(zip)
@@ -432,8 +434,6 @@ mouseout = function() {
 };
 
 function clicked(d) {
-
-  $('#info').html("<b>Zip:</b> " + d.id + "<br><br><b>Incidence Rate in 3-Digit Zip Code Area:</b> " + getItem(d.id))
   var x, y, k;
 
   if (d && centered !== d) {
