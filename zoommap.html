@@ -344,7 +344,7 @@ svg.append("rect")
 var g = svg.append("g");
 
 d3.json("ny.topojson", function(error, ny) {
-  g.append("g")
+    g.append("g")
       .attr("id", "zipcode")
     .selectAll("path")
       .data(topojson.feature(ny, ny.objects.ny).features)
@@ -392,7 +392,7 @@ d3.json("hospadd.json", function(hosps) {
 });
 
 zipmouseover = function(d) {
-$('#info').html("<h4><b>Zip:</b> " + d.id + "<br>Incidence Rate in 3-Digit Zip Code Area: " + getItem(d.id)) + "</h4>"
+$('#info').html("<h5>Zip: " + d.id + "<br>Incidence Rate in 3-Digit Zip Code Area: " + getItem(d.id)) + "</h5>"
 }
 
 function getItem(zip){
@@ -420,7 +420,7 @@ mousemove = function(d) {
         x = event.pageX;
         y = event.pageY;
     } else {
-        o = $('.usmap').offset();
+        o = $('body').offset();
         x = o.left + (d.xy[0] * .75);
         y = o.top + (d.xy[1] * .75) + 67;
     }

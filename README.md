@@ -5,6 +5,8 @@ healthny
 
 Zoommable/Choropleth NY State Map, JSON input
 
+Google Maps Zip Code Overlay (modified from http://www.caudillweb.com/temp/d3_choropleth.html))
+
 http://th3o6a1d.github.io/healthny/ 
 
 Thanks to mbostock
