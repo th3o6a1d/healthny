@@ -48,7 +48,7 @@
 
       var topo;
       d3.json("ny.topojson", function(ny) {
-        topo = topojson.feature(ny, ny.objects.ny)});
+        topo = topojson.feature(ny, ny.objects.ny)
 
       
       var overlay = new google.maps.OverlayView();
@@ -71,9 +71,7 @@
             var pixelCoordinates = overlayProjection.fromLatLngToDivPixel(googleCoordinates);
             return [pixelCoordinates.x, pixelCoordinates.y];
           }
-
           path = d3.geo.path().projection(googleMapProjection);
-          console.log(topo)
           adminDivisions.selectAll("path")
             .data(topo.features)
             .attr("d", path) // update existing paths
@@ -84,7 +82,7 @@
       };
 
       overlay.setMap(map);
-      
+      });
       // GeoJSON for Mozambique's provin
     });
       
