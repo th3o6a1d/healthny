@@ -79,13 +79,6 @@ div.tooltip .l {
 }
 
 
-
-
-
-
-
-
-
 </style>
 <body>
 
@@ -96,11 +89,10 @@ div.tooltip .l {
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/spin.js/2.0.0/spin.min.js"></script>
-
 <div class="well scroll-left tooltip" style="width:450px" id="info">
 <h4>Zoomable D3 Map</h4>
 </div>
-
+<div id="piechart" style="width: 300px; height: 300px;"></div>
 <script>
 
 // Random dataset.  Each 'id' is a 3-digit zip code.  'Rate' is incidence, prevalence, or whatever.
@@ -358,7 +350,6 @@ d3.json("ny.topojson", function(error, ny) {
         })
      spinner.stop()
 
-
 d3.json("hospadd.json", function(hosps) {
 
   node = g.append("g")
@@ -368,15 +359,15 @@ d3.json("hospadd.json", function(hosps) {
       .enter()
       .append("g")
       .attr("class", "node")
-      .attr("transform", function(d) { return "translate(" + projection(d.coordinates) + ")"; });
+      .attr("transform", function(d) { return "translate(" + projection([d.coordinates[1],d.coordinates[0]]) + ")"; });
 
   node.append("circle")
-    .attr("r", 2)
-    .attr("fill", "steelblue")
+    .attr("r", function(d) { if(d.beds > 300){ return 2 * d.beds/625 } else {return 2}; })
+    .attr("fill", "red")
+    .attr("opacity", 0.5)
     .on("mouseover", mouseover)
     .on("mouseout", mouseout)
     .on("mousemove", mousemove)
-    .on("click", mouseclick)
 
   node.append("text")
     .attr("id", function(d) { return "hosp"+d.id; })
@@ -406,12 +397,16 @@ function getItem(zip){
     console.log('Could not load zip code ' + zip);
   }}
 
-
 tooltip = d3.select("body").append("div").attr("class", "tooltip").style("position", "absolute").style("z-index", "10").style("opacity", 0);
 
 mouseover = function(d) {
-    return tooltip.html("        <div class='t'>" + d.hospital + "</div>        <table>            <tr><td class='l'>Beds:</td><td class='r'><span class='d'></span>" + "</td></tr></table>").transition().duration(100).style("opacity", 1.0);
-};
+
+    var bedcount = ""
+    if(d.beds){
+    bedcount = "<tr>Beds: " + d.beds + "</tr>"
+    }
+    return tooltip.html("        <div class='t'>" + d.hospital + "</div><table>" + bedcount + "</table>").transition().duration(100).style("opacity", 1.0);
+    };
 
 mousemove = function(d) {
     var o, x, y;

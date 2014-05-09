@@ -23,15 +23,16 @@
         }
         
         .SvgOverlay path {
-            stroke: Orange;
-            stroke-width: 2px;
-            fill: Orange;
-            fill-opacity: .3;
+            stroke: Green;
+            stroke-width: 0.5px;
+            fill: Blue;
+            fill-opacity: .2;
         }
     </style>
 </head>
 <body>
-    <div id="map">
+    <div id="map" onclick="overlay.setmMap(map)">
+      <button id="hide">Show Zips</button>
     </div>
 
     <script>
