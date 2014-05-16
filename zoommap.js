@@ -1,4 +1,4 @@
-function ZoomMap(geography, layers, dataset, options) {
+function ZoomMap(geography, layers, dataset) {
 
     function getItem(area) {
       var area = new Number(area)
@@ -65,7 +65,7 @@ function ZoomMap(geography, layers, dataset, options) {
     svg.append("rect").attr("class", "background").attr("id", "canvas").attr("width", width).attr("height", height);
     svg.append("div").attr("class", "scroll-left").attr("id", "info").attr("width", 300).attr("height", 200);
     var g = svg.append("g");
-    var target = document.getElementById('canvas')
+    var target = document.getElementById('info')
     var spinner = new Spinner().spin(target);
 
     d3.json(geography, function (error, ny) {
